@@ -1,0 +1,12 @@
+Persistent Character: A module for Factorio
+
+Primarily, this mod prevents characters from disappearing on logout.
+This results in characters lying about without associated players.
+
+Consequently, this mod tracks said idle characters for later use. By
+default, idle characters are shared with the rest of the team. Players may
+leave behind an unshared character by disabling their share setting.
+
+To switch characters, mouse over an idle character and hit the switch key
+(CTRL+SPACE by default). Players who join the game will be attached to any
+available character, or otherwise respawned.
