@@ -18,6 +18,19 @@ script.on_event(defines.events.on_forces_merged, function(event)
 end)
 
 
+-- Add character to list according to player settings
+local list_character = function(player, char)
+  local list = global.free_characters[player.force.index]
+
+  if settings.get_player_settings(player)["persistent-character-share"].value
+  then
+    -- Shared character
+    list[char.unit_number] = {entity = char}
+  else
+    -- Personal character
+    list[char.unit_number] = {entity = char, owner = player}
+  end
+end
 -- Share removed player's personal characters
 script.on_event(defines.events.on_pre_player_removed, function(event)
   local player = game.players[event.player_index]
@@ -37,19 +50,6 @@ end,
   -- Fire event only for character types
   {{filter = "type", type = "character"}}
 )
--- Add character to list according to player settings
-local list_character = function(player, char)
-  local list = global.free_characters[player.force.index]
-
-  if settings.get_player_settings(player)["persistent-character-share"].value
-  then
-    -- Shared character
-    list[char.unit_number] = {entity = char}
-  else
-    -- Personal character
-    list[char.unit_number] = {entity = char, owner = player}
-  end
-end
 -- Add built character to list
 script.on_event(defines.events.on_built_entity, function(event)
   local player = game.players[event.player_index]
