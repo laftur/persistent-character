@@ -22,6 +22,8 @@ end)
 script.on_event(defines.events.on_pre_player_removed, function(event)
   local player = game.players[event.player_index]
   local list = global.free_characters[player.force.index]
+  -- Detach character if they had one
+  if player.character then list_character(player, player.character) end
 
   for unit, data in pairs(list) do
     if data.owner == player then data.owner = nil end
