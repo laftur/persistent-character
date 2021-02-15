@@ -62,8 +62,7 @@ end,
 )
 -- Add built character to list
 script.on_event(defines.events.on_built_entity, function(event)
-  local player = game.players[event.player_index]
-  list_character(player, event.created_entity)
+  list_character(game.players[event.player_index], event.created_entity)
 end,
   -- Fire event only for character types
   {{filter = "type", type = "character"}}
@@ -92,6 +91,8 @@ local try_switch = function(player, char)
   if (not data.owner) or data.owner == player then
     -- Character is shared or owned by player
     if player.character then list_character(player, player.character) end
+    -- No need to detach because we're about to attach to something else
+
     settings.get_player_settings(player)["persistent-character-share"] =
       {value = data.owner ~= player}
     player.set_controller
