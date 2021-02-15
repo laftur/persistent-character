@@ -84,6 +84,8 @@ local try_switch = function(player, char)
   if (not data.owner) or data.owner == player then
     -- Character is shared or owned by player
     if player.character then list_character(player, player.character) end
+    settings.get_player_settings(player)["persistent-character-share"] =
+      {value = data.owner ~= player}
     player.set_controller
       {type = defines.controllers.character, character = char}
     list[char.unit_number] = nil
