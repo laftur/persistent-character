@@ -31,12 +31,22 @@ local list_character = function(player, char)
     list[char.unit_number] = {entity = char, owner = player}
   end
 end
+-- Dissociate from character, becoming a static view of the spawn location
+local detach_character = function(player)
+  player.set_controller{
+    type = defines.controllers.cutscene,
+    start_position = player.force.get_spawn_position(player.surface)
+  }
+end
 -- Share removed player's personal characters
 script.on_event(defines.events.on_pre_player_removed, function(event)
   local player = game.players[event.player_index]
   local list = global.free_characters[player.force.index]
   -- Detach character if they had one
-  if player.character then list_character(player, player.character) end
+  if player.character then
+    list_character(player, player.character)
+    detach_character(player)
+  end
 
   for unit, data in pairs(list) do
     if data.owner == player then data.owner = nil end
@@ -61,13 +71,11 @@ end,
 -- Return character to list instead of disappearing on logout
 script.on_event(defines.events.on_pre_player_left_game, function(event)
   local player = game.players[event.player_index]
-  if player.character then list_character(player, player.character) end
-
-  -- Detach character from player
-  player.set_controller{
-    type = defines.controllers.cutscene,
-    start_position = player.force.get_spawn_position(player.surface)
-  }
+  -- Detach character if they had one
+  if player.character then
+    list_character(player, player.character)
+    detach_character(player)
+  end
 end)
 
 
