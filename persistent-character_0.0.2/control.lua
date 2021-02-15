@@ -124,7 +124,8 @@ end
 script.on_event(defines.events.on_pre_player_died, function(event)
   next_character( game.players[event.player_index] )
 end)
--- Find a character upon joining the game
+-- Find a character when rejoining the game
 script.on_event(defines.events.on_player_joined_game, function(event)
-  next_character( game.players[event.player_index] )
+  local player = game.players[event.player_index]
+  if not player.character then next_character(player) end
 end)
