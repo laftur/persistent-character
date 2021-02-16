@@ -108,10 +108,10 @@ script.on_event("persistent-character-switch", function(event)
   -- Notify player of results
   if switched == nil then
     player.create_local_flying_text
-      {text = "Not your team!", postion = other.position}
+      {text = "Not your team!", position = other.position}
   elseif not switched then
     player.create_local_flying_text
-      {text = "Not shared!", postion = other.position}
+      {text = "Not shared!", position = other.position}
   end
 end)
 -- Switch to any free character
