@@ -31,18 +31,27 @@ local list_character = function(player, char)
     list[char.unit_number] = {entity = char, owner = player}
   end
 end
+-- Share player's personal characters from given force
+local share_all = function(player, force)
+  local list = global.free_characters[force.index]
+  for unit, data in pairs(list) do
+    if data.owner == player then data.owner = nil end
+  end
+end
+-- Share defecting player's personal characters
+script.on_event(defines.events.on_player_changed_force, function(event)
+  local player = game.players[event.player_index]
+  share_all(player, event.force)
+end)
 -- Share removed player's personal characters
 script.on_event(defines.events.on_pre_player_removed, function(event)
   local player = game.players[event.player_index]
-  local list = global.free_characters[player.force.index]
+  share_all(player, player.force)
+
   -- Detach character if they had one
   if player.character then
     list_character(player, player.character)
     player.character = nil
-  end
-
-  for unit, data in pairs(list) do
-    if data.owner == player then data.owner = nil end
   end
 end)
 -- Remove dead character from list
