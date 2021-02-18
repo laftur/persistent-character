@@ -129,7 +129,7 @@ local next_character = function(player)
     if try_switch(player, data.entity) then return end
   end
   -- No character is free, so trigger a respawn
-  player.ticks_to_respawn = nil
+  player.ticks_to_respawn = 600
 end
 -- Switch to another character just before death
 script.on_event(defines.events.on_pre_player_died, function(event)
