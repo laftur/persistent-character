@@ -233,6 +233,9 @@ end)
 -- Find a character when rejoining the game
 script.on_event(defines.events.on_player_joined_game, function(event)
   local player = game.players[event.player_index]
+  -- Ignore players stuck in a cutscene
+  if player.controller_type == defines.controllers.cutscene then return end
+
   if not player.character then next_character(player) end
 
   -- Trigger respawn if player needs a character and isn't set to respawn
