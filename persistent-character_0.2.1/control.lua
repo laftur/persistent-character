@@ -180,6 +180,13 @@ local try_switch = function(player, char)
   local list = global.free_characters[player.force.index]
   local data = list[char.unit_number]
 
+  -- exit from space-exploration satellite view
+	if remote.interfaces["space-exploration"] then
+		if remote.call("space-exploration", "remote_view_is_active", {player = player}) then
+			remote.call("space-exploration", "remote_view_stop", {player = player})
+		end
+	end
+  
   -- Abort if char is part of another team
   if not data then return end
 
@@ -190,6 +197,11 @@ local try_switch = function(player, char)
 
     settings.get_player_settings(player)["persistent-character-share"] =
       {value = data.owner ~= player}
+    
+    -- teleport player in case we shifting between surfaces
+		player.character = nil
+		player.teleport(char.position, char.surface)
+    
     player.set_controller
       {type = defines.controllers.character, character = char}
     list[char.unit_number] = nil
